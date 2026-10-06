@@ -11,7 +11,7 @@ window.EVENT_CONFIG = {
   // Where lead forms (guestlist / table enquiries) are sent.
   // Paste your Google Apps Script web-app URL (see integrations/google-sheets.gs),
   // or any webhook (Zapier, Make, Formspree...). Leave "" to skip sending.
-  leadWebhookUrl: "",
+  leadWebhookUrl: "https://script.google.com/macros/s/AKfycbzjvAfoFK4Qb6CW8hfRLIhnJcKMqN6Wv7zw8byv04ClG7bzbh5iF1niWVhYsaOQw4vEMw/exec",
 
   // If true, "Buy" asks for name/email/phone before redirecting to the
   // ticketing site (more data, slightly fewer clicks through). Default off.
