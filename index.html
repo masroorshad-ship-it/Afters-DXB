@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AFTERS DXB — Tickets</title>
+  <meta name="description" content="Tickets and VIP tables for AFTERS DXB." />
+  <!-- Social share preview (edit to match your event) -->
+  <meta property="og:title" content="AFTERS DXB — Tickets" />
+  <meta property="og:description" content="Tickets and VIP tables for AFTERS DXB." />
+  <meta property="og:type" content="website" />
+  <!-- <meta property="og:image" content="https://your-domain.com/assets/hero.jpg" /> -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Unbounded:wght@600;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/styles.css" />
+</head>
+<body>
+  <header class="nav">
+    <a href="#top" class="brand" data-bind="event.brand"></a>
+    <a href="#tickets" class="btn btn-sm">Get tickets</a>
+  </header>
+
+  <main id="top">
+    <!-- HERO -->
+    <section class="hero" id="hero">
+      <div class="hero-inner">
+        <p class="eyebrow"><span data-bind="event.dateLabel"></span> · <span data-bind="event.city"></span></p>
+        <h1 data-bind="event.title"></h1>
+        <p class="tagline" data-bind="event.tagline"></p>
+        <div class="countdown" id="countdown" aria-live="polite"></div>
+        <div class="hero-cta">
+          <a href="#tickets" class="btn">Buy tickets</a>
+          <a href="#tables" class="btn btn-ghost">Book a table</a>
+        </div>
+        <ul class="facts">
+          <li><strong>When</strong><span data-bind="event.timeLabel"></span></li>
+          <li><strong>Where</strong><a id="venue-link" target="_blank" rel="noopener"><span data-bind="event.venue"></span></a></li>
+          <li><strong>Entry</strong><span data-bind="event.ageLimit"></span></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ABOUT / SHOW -->
+    <section class="section" id="show">
+      <h2>The show</h2>
+      <p class="lead" data-bind="event.about"></p>
+      <div class="highlights" id="highlights"></div>
+      <h3>Line-up</h3>
+      <ol class="lineup" id="lineup"></ol>
+    </section>
+
+    <!-- TICKETS TABLE -->
+    <section class="section" id="tickets">
+      <h2>Tickets &amp; tables</h2>
+      <p class="muted">Prices in <span data-bind="event.currency"></span>. Tickets are sold via our official ticketing partner.</p>
+      <div class="table-wrap">
+        <table class="tickets">
+          <thead>
+            <tr><th scope="col">Option</th><th scope="col">Includes</th><th scope="col">Price</th><th scope="col"><span class="sr-only">Action</span></th></tr>
+          </thead>
+          <tbody id="ticket-rows"></tbody>
+        </table>
+      </div>
+      <span id="tables"></span>
+    </section>
+
+    <!-- GUESTLIST / LEAD CAPTURE -->
+    <section class="section signup" id="signup">
+      <h2>Not ready yet?</h2>
+      <p class="muted">Join the list for price-drop alerts, set times and next-event presale.</p>
+      <form id="signup-form" class="form" novalidate>
+        <input type="hidden" name="form" value="guestlist" />
+        <label>Name<input name="name" autocomplete="name" required /></label>
+        <label>Email<input name="email" type="email" autocomplete="email" required /></label>
+        <label>WhatsApp / phone<input name="phone" type="tel" autocomplete="tel" placeholder="+971…" /></label>
+        <label class="check"><input type="checkbox" name="consent" required /> I agree to receive event updates.</label>
+        <button class="btn" type="submit">Join the list</button>
+        <p class="form-msg" role="status"></p>
+      </form>
+    </section>
+
+    <!-- FAQ -->
+    <section class="section" id="faq">
+      <h2>FAQ</h2>
+      <div id="faqs"></div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p><span data-bind="event.brand"></span> · <a id="ig-link" target="_blank" rel="noopener">Instagram</a> · <a id="wa-link" target="_blank" rel="noopener">WhatsApp</a></p>
+  </footer>
+
+  <!-- Sticky mobile CTA -->
+  <a href="#tickets" class="sticky-cta" id="sticky-cta">Get tickets <span id="sticky-from"></span></a>
+
+  <!-- Lead / table modal -->
+  <dialog id="lead-modal">
+    <form id="lead-form" class="form" method="dialog" novalidate>
+      <button type="button" class="close" aria-label="Close" data-close>&times;</button>
+      <h3 id="lead-title">Reserve a table</h3>
+      <p class="muted" id="lead-sub"></p>
+      <input type="hidden" name="form" value="table" />
+      <input type="hidden" name="option" />
+      <label>Name<input name="name" autocomplete="name" required /></label>
+      <label>Email<input name="email" type="email" autocomplete="email" required /></label>
+      <label>WhatsApp / phone<input name="phone" type="tel" autocomplete="tel" placeholder="+971…" required /></label>
+      <label data-table-only>Guests<input name="guests" type="number" min="1" max="30" value="6" /></label>
+      <label data-table-only>Notes<textarea name="notes" rows="2" placeholder="Birthday, bottle preferences…"></textarea></label>
+      <button class="btn" type="submit" id="lead-submit">Send request</button>
+      <p class="form-msg" role="status"></p>
+    </form>
+  </dialog>
+
+  <script src="assets/config.js"></script>
+  <script src="assets/app.js"></script>
+</body>
+</html>
