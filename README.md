@@ -30,11 +30,14 @@ Form details (email, phone, name) go to Meta as **Advanced Matching**, which imp
 UTM parameters from your ad (`utm_source`, `utm_campaign`, …) are added to the ticket links automatically and saved with every lead.
 
 ## 3. Collect leads into Google Sheets
-1. Create a Google Sheet → **Extensions → Apps Script**. Paste in `integrations/google-sheets.gs`.
-2. **Deploy → New deployment → Web app** (Execute as: Me, Access: Anyone).
-3. Paste the URL into `leadWebhookUrl` in `assets/config.js`.
+1. Create a Google Sheet (go to sheets.new). Then open **Extensions → Apps Script**.
+2. Delete the sample code, paste in all of `integrations/google-sheets.gs`, and click **Save**.
+3. Click **Deploy → New deployment**. Click the gear icon and choose **Web app**. Set **Execute as: Me** and **Who has access: Anyone**, click **Deploy**, then allow access when Google asks.
+4. Copy the **Web app URL** (it ends in `/exec`) into `leadWebhookUrl` in `assets/config.js`.
 
-Each submission becomes a row: name, email, phone, ticket/table, guests, UTMs, and timestamp. A Zapier, Make or Formspree webhook URL works too.
+Every form submission becomes a row in the **Leads** tab. Each row has the time (Dubai), the form used (guestlist, table or checkout), the ticket or table, name, email, phone, guests, notes, the ad's UTM tags and the fbclid. Phone numbers are stored as text, so `+971…` stays as typed.
+
+To check it's working, open the Web app URL in your browser. It should say "Lead collector is running."
 
 Optional: set `requireLeadBeforeCheckout: true` to ask for name, email and phone before redirecting to the ticket site. You get more data, but fewer people will click through.
 
