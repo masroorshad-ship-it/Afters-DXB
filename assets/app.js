@@ -8,6 +8,7 @@
       return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
     });
   };
+  var hasPrice = function (t) { return typeof t.price === "number"; };
   var fmtPrice = function (n) { return E.currency + " " + Number(n).toLocaleString("en-US"); };
 
   /* ---------- Attribution: keep UTMs / fbclid from the Meta ad ---------- */
@@ -64,12 +65,37 @@
     el.textContent = v || "";
   });
   $("#venue-link").href = E.mapUrl;
-  $("#ig-link").href = E.instagram;
   $("#wa-link").href = "https://wa.me/" + E.whatsappNumber;
-  if (E.heroImage) {
-    var hero = $("#hero");
-    hero.classList.add("has-image");
-    hero.style.backgroundImage = "linear-gradient(rgba(11,10,16,.55), rgba(11,10,16,.9)), url('" + encodeURI(E.heroImage) + "')";
+  $("#phones").innerHTML = (E.phones || []).map(function (p) {
+    return '<a href="tel:+971' + esc(p.replace(/\D/g, "").replace(/^0/, "")) + '">' + esc(p) + "</a>";
+  }).join(" / ");
+  $("#partners").innerHTML = (E.partners || []).map(function (p) { return "<span>" + esc(p) + "</span>"; }).join("");
+
+  if (E.posterImage) {
+    $("#poster-img").src = E.posterImage;
+    $("#poster-img").alt = E.title + " poster";
+    $("#hero-poster").hidden = false;
+  }
+
+  if (E.video) {
+    var vid = $("#promo-video"), sound = $("#sound-btn"), soundTracked = false;
+    if (E.videoPoster) vid.poster = E.videoPoster;
+    vid.src = E.video;
+    $("#video-wrap").hidden = false;
+    // Only play while on screen (saves data on mobile).
+    if ("IntersectionObserver" in window) {
+      new IntersectionObserver(function (en) {
+        if (en[0].isIntersecting) { var p = vid.play(); if (p && p.catch) p.catch(function () {}); }
+        else vid.pause();
+      }, { threshold: 0.4 }).observe(vid);
+    } else { vid.autoplay = true; }
+    sound.addEventListener("click", function () {
+      vid.muted = !vid.muted;
+      if (!vid.muted) { vid.play(); }
+      sound.textContent = vid.muted ? "Tap for sound" : "Mute";
+      sound.setAttribute("aria-pressed", String(!vid.muted));
+      if (!soundTracked) { soundTracked = true; track("VideoSoundOn", { content_name: E.title }, true); }
+    });
   }
 
   $("#highlights").innerHTML = C.highlights.map(function (h) {
@@ -77,25 +103,30 @@
   }).join("");
 
   $("#lineup").innerHTML = C.lineup.map(function (a) {
-    return '<li><span class="name">' + esc(a.name) + '</span><span class="time">' + esc(a.time) +
-      '</span><span class="role">' + esc(a.role) + "</span></li>";
+    var head = a.role === "Headliner";
+    return '<li' + (head ? ' class="headliner"' : "") + '><span class="name">' + esc(a.name) + "</span>" +
+      (a.time ? '<span class="time">' + esc(a.time) + "</span>" : "") +
+      '<span class="role">' + esc(a.role) + "</span></li>";
   }).join("");
 
   $("#ticket-rows").innerHTML = C.tickets.map(function (t) {
     var isTable = t.type === "table";
-    var badge = t.soldOut ? "" : t.badge ? '<span class="badge">' + esc(t.badge) + "</span>"
+    var badge = t.soldOut ? '<span class="badge out">Sold out</span>'
+      : t.badge ? '<span class="badge">' + esc(t.badge) + "</span>"
       : isTable ? '<span class="badge table">Table</span>' : "";
+    var price = hasPrice(t)
+      ? fmtPrice(t.price) + (t.priceNote ? "<small>" + esc(t.priceNote) + "</small>" : "")
+      : '<span class="tbc">' + (isTable ? "On request" : "See on " + esc(E.ticketingPartner || "site")) + "</span>";
     var btn = t.soldOut
-      ? '<button class="btn btn-sm" disabled>Sold out</button>'
-      : '<button class="btn btn-sm" data-ticket="' + esc(t.id) + '">' + (isTable ? "Reserve" : "Buy now") + "</button>";
-    return '<tr class="' + (isTable ? "is-table " : "") + (t.soldOut ? "sold-out" : "") + '">' +
-      '<td><span class="opt">' + esc(t.name) + "</span>" + badge + "</td>" +
-      '<td class="inc">' + esc(t.includes) + "</td>" +
-      '<td class="price">' + fmtPrice(t.price) + (t.priceNote ? "<small>" + esc(t.priceNote) + "</small>" : "") + "</td>" +
-      "<td>" + btn + "</td></tr>";
+      ? '<button class="btn" disabled>Sold out</button>'
+      : '<button class="btn" data-ticket="' + esc(t.id) + '">' + (isTable ? "Reserve table" : "Buy now") + "</button>";
+    return '<article class="ticket' + (isTable ? " is-table" : "") + (t.soldOut ? " sold-out" : "") + '">' +
+      '<div class="ticket-head"><h3>' + esc(t.name) + "</h3>" + badge + "</div>" +
+      '<p class="price">' + price + "</p>" +
+      '<p class="inc">' + esc(t.includes) + "</p>" + btn + "</article>";
   }).join("");
 
-  var available = C.tickets.filter(function (t) { return !t.soldOut && t.type === "ticket"; });
+  var available = C.tickets.filter(function (t) { return !t.soldOut && t.type === "ticket" && hasPrice(t); });
   if (available.length) {
     $("#sticky-from").textContent = "from " + fmtPrice(Math.min.apply(null, available.map(function (t) { return t.price; })));
   }
@@ -164,10 +195,15 @@
   }
 
   /* ---------- Buy / Reserve buttons ---------- */
+  function priceParams(t, extra) {
+    var p = Object.assign({ content_name: t.name, content_ids: [t.id] }, extra);
+    if (hasPrice(t)) { p.value = t.price; p.currency = E.currency; }
+    return p;
+  }
   var modal = $("#lead-modal"), leadForm = $("#lead-form"), pending = null;
 
   function goToCheckout(t) {
-    var url = withUtm(t.url);
+    var url = withUtm(t.url || C.ticketUrl);
     // Give the pixel a moment to send before leaving the page.
     setTimeout(function () { location.href = url; }, pixelOn ? 350 : 0);
   }
@@ -179,7 +215,7 @@
     leadForm.form.value = mode;
     $("#lead-title").textContent = mode === "table" ? "Reserve: " + t.name : "Almost there";
     $("#lead-sub").textContent = mode === "table"
-      ? fmtPrice(t.price) + (t.priceNote ? " " + t.priceNote : "") + " · Our host confirms on WhatsApp."
+      ? (hasPrice(t) ? fmtPrice(t.price) + (t.priceNote ? " " + t.priceNote : "") + " · " : "") + "Our host confirms on WhatsApp."
       : "Enter your details and we'll take you to checkout for " + t.name + ".";
     $("#lead-submit").textContent = mode === "table" ? "Send request" : "Continue to checkout";
     leadForm.querySelectorAll("[data-table-only]").forEach(function (el) { el.hidden = mode !== "table"; });
@@ -192,9 +228,9 @@
     var b = e.target.closest("[data-ticket]");
     if (!b) return;
     var t = C.tickets.find(function (x) { return x.id === b.getAttribute("data-ticket"); });
-    var params = { content_name: t.name, content_ids: [t.id], content_type: "product", value: t.price, currency: E.currency };
+    var params = priceParams(t, { content_type: "product" });
 
-    if (t.type === "table" && !t.url) {
+    if (t.type === "table" && !t.url) {  // tables use the form unless given their own url
       track("Contact", params);
       openModal(t, "table");
     } else if (C.requireLeadBeforeCheckout) {
@@ -209,7 +245,7 @@
     e.preventDefault();
     if (!validate(leadForm)) return;
     var d = formData(leadForm), t = pending.ticket;
-    var params = { content_name: t.name, content_ids: [t.id], value: t.price, currency: E.currency };
+    var params = priceParams(t, {});
     identify(d);
     $("#lead-submit").disabled = true;
 

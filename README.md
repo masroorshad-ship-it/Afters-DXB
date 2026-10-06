@@ -3,12 +3,13 @@
 A fast, mobile-first landing page for Meta (Facebook/Instagram) ads. It shows the event and line-up, plus a ticket/table price table. "Buy" buttons send people to your ticketing platform (District, Platinumlist, etc.). The page also tracks every step with the Meta Pixel and collects leads.
 
 ## 1. Edit your event
-Everything lives in **`assets/config.js`**: event details, line-up, ticket tiers and prices, ticket links, tables, and FAQs.
+Everything lives in **`assets/config.js`**: event details, line-up, ticket prices, the ticket link, tables, and FAQs.
 
-- `type: "ticket"`: the button goes straight to `url` (your District/ticketing link).
+- **Ticket link:** paste your District link into `ticketUrl`. Every **Buy now** button sends people there. To send one ticket somewhere else, give it its own `url`.
 - `type: "table"`: the button opens a reservation form. The lead is saved, then WhatsApp opens with the booking details pre-filled. To use an external booking link instead, set `url`.
-- `soldOut: true` greys out a tier. `badge: "Selling fast"` adds a label.
-- Optional hero photo: add `assets/hero.jpg` and set `heroImage: "assets/hero.jpg"`.
+- `price: null` shows "On request" / "See on District" instead of a price.
+- `soldOut: true` greys out a ticket. `badge: "Selling fast"` adds a label.
+- Media: `assets/poster.webp` (hero), `assets/promo.mp4` (show video, muted autoplay with a "Tap for sound" button). Replace the files to swap them.
 
 ## 2. Meta Pixel (ad data)
 Put your Pixel ID in `metaPixelId`. The page sends these events:

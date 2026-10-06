@@ -3,16 +3,17 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>AFTERS DXB — Tickets</title>
-  <meta name="description" content="Tickets and VIP tables for AFTERS DXB." />
+  <title>KIKKAT Live at Opal Room — Tickets</title>
+  <meta name="description" content="AFTERS presents KIKKAT live at Opal Room, DIFC Dubai. Fri 9 Oct, 10 PM – 4 AM. Tickets and VIP tables." />
   <!-- Social share preview (edit to match your event) -->
-  <meta property="og:title" content="AFTERS DXB — Tickets" />
-  <meta property="og:description" content="Tickets and VIP tables for AFTERS DXB." />
+  <meta property="og:title" content="KIKKAT Live at Opal Room — AFTERS" />
+  <meta property="og:description" content="Fri 9 Oct, 10 PM – 4 AM · Opal Room, DIFC Dubai. Get tickets and VIP tables." />
   <meta property="og:type" content="website" />
-  <!-- <meta property="og:image" content="https://your-domain.com/assets/hero.jpg" /> -->
+  <!-- Once published, set the full URL so WhatsApp/Instagram previews show the poster: -->
+  <!-- <meta property="og:image" content="https://your-domain.com/assets/poster.webp" /> -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Unbounded:wght@600;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Silkscreen:wght@400;700&family=Unbounded:wght@600;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="assets/styles.css" />
 </head>
 <body>
@@ -25,44 +26,50 @@
     <!-- HERO -->
     <section class="hero" id="hero">
       <div class="hero-inner">
-        <p class="eyebrow"><span data-bind="event.dateLabel"></span> · <span data-bind="event.city"></span></p>
-        <h1 data-bind="event.title"></h1>
-        <p class="tagline" data-bind="event.tagline"></p>
-        <div class="countdown" id="countdown" aria-live="polite"></div>
-        <div class="hero-cta">
-          <a href="#tickets" class="btn">Buy tickets</a>
-          <a href="#tables" class="btn btn-ghost">Book a table</a>
+        <div class="hero-text">
+          <p class="eyebrow" data-bind="event.presenter"></p>
+          <p class="series" data-bind="event.series"></p>
+          <h1 data-bind="event.title"></h1>
+          <p class="tagline" data-bind="event.tagline"></p>
+          <div class="countdown" id="countdown" aria-live="off"></div>
+          <div class="hero-cta">
+            <a href="#tickets" class="btn">Buy tickets</a>
+            <a href="#tickets" class="btn btn-ghost">Book a table</a>
+          </div>
+          <ul class="facts">
+            <li><strong>When</strong><span data-bind="event.dateLabel"></span><br /><span data-bind="event.timeLabel"></span></li>
+            <li><strong>Where</strong><a id="venue-link" target="_blank" rel="noopener"><span data-bind="event.venue"></span></a><br /><span class="muted" data-bind="event.address"></span></li>
+            <li><strong>Entry</strong><span data-bind="event.ageLimit"></span></li>
+          </ul>
         </div>
-        <ul class="facts">
-          <li><strong>When</strong><span data-bind="event.timeLabel"></span></li>
-          <li><strong>Where</strong><a id="venue-link" target="_blank" rel="noopener"><span data-bind="event.venue"></span></a></li>
-          <li><strong>Entry</strong><span data-bind="event.ageLimit"></span></li>
-        </ul>
+        <figure class="hero-poster" id="hero-poster" hidden>
+          <img id="poster-img" alt="" width="1080" height="1350" fetchpriority="high" />
+        </figure>
       </div>
     </section>
 
     <!-- ABOUT / SHOW -->
     <section class="section" id="show">
       <h2>The show</h2>
-      <p class="lead" data-bind="event.about"></p>
+      <div class="show-grid">
+        <div>
+          <p class="lead" data-bind="event.about"></p>
+          <h3>Line-up</h3>
+          <ol class="lineup" id="lineup"></ol>
+        </div>
+        <div class="video-wrap" id="video-wrap" hidden>
+          <video id="promo-video" muted loop playsinline preload="metadata"></video>
+          <button type="button" class="sound-btn" id="sound-btn" aria-pressed="false">Tap for sound</button>
+        </div>
+      </div>
       <div class="highlights" id="highlights"></div>
-      <h3>Line-up</h3>
-      <ol class="lineup" id="lineup"></ol>
     </section>
 
     <!-- TICKETS TABLE -->
     <section class="section" id="tickets">
       <h2>Tickets &amp; tables</h2>
-      <p class="muted">Prices in <span data-bind="event.currency"></span>. Tickets are sold via our official ticketing partner.</p>
-      <div class="table-wrap">
-        <table class="tickets">
-          <thead>
-            <tr><th scope="col">Option</th><th scope="col">Includes</th><th scope="col">Price</th><th scope="col"><span class="sr-only">Action</span></th></tr>
-          </thead>
-          <tbody id="ticket-rows"></tbody>
-        </table>
-      </div>
-      <span id="tables"></span>
+      <p class="muted">Prices in <span data-bind="event.currency"></span>. Tickets are sold via our official ticketing partner, <span data-bind="event.ticketingPartner"></span>.</p>
+      <div class="ticket-grid" id="ticket-rows"></div>
     </section>
 
     <!-- GUESTLIST / LEAD CAPTURE -->
@@ -88,7 +95,9 @@
   </main>
 
   <footer class="footer">
-    <p><span data-bind="event.brand"></span> · <a id="ig-link" target="_blank" rel="noopener">Instagram</a> · <a id="wa-link" target="_blank" rel="noopener">WhatsApp</a></p>
+    <p class="partners" id="partners"></p>
+    <p>Bookings &amp; enquiries: <span id="phones"></span> · <a id="wa-link" target="_blank" rel="noopener">WhatsApp</a></p>
+    <p><span data-bind="event.brand"></span> · <span data-bind="event.address"></span>, <span data-bind="event.city"></span></p>
   </footer>
 
   <!-- Sticky mobile CTA -->
