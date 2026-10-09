@@ -22,10 +22,12 @@ const SAMPLE_TX = [
 
 const RECEIVE_INFO = [
   ['Beneficiary', 'Demo User (sample)'],
-  ['Account number', '000000000 (demo)'],
-  ['Routing', '000000000 (demo)'],
+  ['Account number', '1234567890 (demo)'],
+  ['Routing number', '123456789 (demo)'],
+  ['SWIFT code', 'DEMOUS00 (demo)'],
   ['Bank name', 'Example Demo Bank'],
-  ['Bank address', '123 Sample Street, Demo City'],
+  ['Bank address', '123 Sample Street, Demo City (demo)'],
+  ['Beneficiary address', '456 Example Road, Demo City (demo)'],
   ['Reference', 'DEMO-ONLY'],
 ];
 
