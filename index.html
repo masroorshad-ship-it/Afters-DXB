@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lumora Demo</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="demo-ribbon">DEMO — SAMPLE DATA ONLY · NOT A REAL ACCOUNT</div>
+
+  <!-- Login -->
+  <section id="login-view" class="login hidden">
+    <div class="login-hero">
+      <h1>Welcome back</h1>
+      <p>Use Lumora (demo) to explore a sample stablecoin payments dashboard.</p>
+    </div>
+    <form id="login-form" class="login-card" autocomplete="off">
+      <div class="brand"><span class="logo">◆</span> LUMORA <span class="badge">DEMO</span></div>
+      <h2>Log in</h2>
+      <p class="muted">Log in to your Lumora demo account to continue.</p>
+      <label>Email<input id="email" type="email" placeholder="you@example.com" required></label>
+      <label>Password<input id="password" type="password" placeholder="••••••" required></label>
+      <div id="login-error" class="error hidden">Invalid email or password.</div>
+      <button type="submit" id="login-btn" class="btn-primary">Log in</button>
+      <p class="hint">Demo credentials: abc@gmail.com / Abc@94</p>
+    </form>
+  </section>
+
+  <!-- App -->
+  <section id="app-view" class="app hidden">
+    <aside class="sidebar">
+      <div class="brand"><span class="logo">◆</span> LUMORA <span class="badge">DEMO</span></div>
+      <nav>
+        <a data-page="overview" class="active">▦ Overview</a>
+        <a data-page="receive">↓ Receive funds</a>
+        <a data-page="withdraw">↑ Withdraw</a>
+        <a data-page="transactions">⇄ Transactions</a>
+        <a data-page="cards">▭ Virtual cards</a>
+        <a data-page="settings">⚙ Settings</a>
+      </nav>
+      <button id="logout" class="logout">⎋ Log out</button>
+    </aside>
+
+    <main>
+      <header class="topbar">
+        <span class="crumb">Company / <b id="crumb-page">Overview</b></span>
+        <span class="user">abc@gmail.com</span>
+      </header>
+
+      <!-- Overview -->
+      <div class="page" id="page-overview">
+        <div class="row-between">
+          <div>
+            <h1>Welcome back, Demo User</h1>
+            <p class="muted">Your sample account at a glance — balance, cash flow and recent activity.</p>
+          </div>
+        </div>
+
+        <div class="balance-card">
+          <div>
+            <div class="muted small">Available balance <span class="badge">SAMPLE</span></div>
+            <div class="balance" id="balance"></div>
+            <div class="muted small">Demo figures · not real funds</div>
+          </div>
+          <div class="balance-actions">
+            <button class="btn-light" data-goto="receive">↓ Receive</button>
+            <button class="btn-ghost" data-goto="withdraw">↑ Withdraw</button>
+          </div>
+        </div>
+
+        <div class="tiles">
+          <div class="tile" data-goto="receive"><span class="ico">↓</span><div><b>Receive funds</b><div class="muted small">Bank details for deposits</div></div></div>
+          <div class="tile" data-goto="withdraw"><span class="ico">↑</span><div><b>Withdraw USDT</b><div class="muted small">Send to a wallet</div></div></div>
+          <div class="tile" data-goto="cards"><span class="ico">▭</span><div><b>Virtual cards</b><div class="muted small">Coming soon</div></div></div>
+        </div>
+
+        <div class="stats">
+          <div class="stat"><div class="muted small">Total in</div><div class="pos" id="stat-in"></div></div>
+          <div class="stat"><div class="muted small">Total out</div><div class="neg" id="stat-out"></div></div>
+          <div class="stat"><div class="muted small">Net flow</div><div id="stat-net"></div></div>
+          <div class="stat"><div class="muted small">Transactions</div><div id="stat-count"></div></div>
+        </div>
+
+        <div class="grid-2">
+          <div class="panel span-2">
+            <div class="row-between"><b>Cash flow</b><span class="muted small"><span class="dot pos-bg"></span>In <span class="dot neg-bg"></span>Out</span></div>
+            <div class="chart" id="chart"></div>
+          </div>
+          <div class="panel">
+            <b>Receiving info</b>
+            <p class="muted small">Sample details — do not send money here.</p>
+            <dl class="kv" id="recv-info"></dl>
+          </div>
+          <div class="panel">
+            <div class="row-between"><b>Recent transactions</b><a class="link" data-goto="transactions">View all →</a></div>
+            <table class="tx compact"><tbody id="recent-tx"></tbody></table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Transactions -->
+      <div class="page hidden" id="page-transactions">
+        <h1>Transactions</h1>
+        <p class="muted">Complete history of sample transactions in this demo account.</p>
+        <div class="filters" id="filters">
+          <button data-f="all" class="active">All</button>
+          <button data-f="Deposit">Deposits</button>
+          <button data-f="Withdrawal">Withdrawals</button>
+          <button data-f="Fee">Fees</button>
+          <button data-f="Pending">Pending</button>
+          <button data-f="Completed">Completed</button>
+          <button data-f="Failed">Failed</button>
+        </div>
+        <div class="panel">
+          <table class="tx">
+            <thead><tr><th>Date</th><th>Description</th><th>Type</th><th>Status</th><th class="r">Amount</th></tr></thead>
+            <tbody id="all-tx"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Receive -->
+      <div class="page hidden" id="page-receive">
+        <h1>Receive funds</h1>
+        <p class="muted">Sample receiving details. This is a demo — no real account exists.</p>
+        <div class="panel"><dl class="kv" id="recv-info-2"></dl></div>
+      </div>
+
+      <!-- Withdraw -->
+      <div class="page hidden" id="page-withdraw">
+        <h1>Withdraw USDT</h1>
+        <p class="muted">Simulated withdrawal — adds a sample transaction to this demo only.</p>
+        <form class="panel form" id="withdraw-form">
+          <label>Amount (USD)<input id="w-amount" type="number" min="1" step="0.01" required></label>
+          <label>Wallet address (TRC20)<input id="w-addr" placeholder="T..." required></label>
+          <button class="btn-primary" type="submit">Submit demo withdrawal</button>
+          <div id="w-msg" class="muted small"></div>
+        </form>
+      </div>
+
+      <div class="page hidden" id="page-cards">
+        <h1>Virtual cards</h1>
+        <div class="panel muted">Virtual cards are not available in the demo.</div>
+      </div>
+
+      <div class="page hidden" id="page-settings">
+        <h1>Settings</h1>
+        <div class="panel">
+          <p>Signed in as <b>abc@gmail.com</b> (demo account).</p>
+          <button class="btn-ghost" id="reset">Reset demo data</button>
+        </div>
+      </div>
+    </main>
+  </section>
+
+  <script src="app.js"></script>
+</body>
+</html>
