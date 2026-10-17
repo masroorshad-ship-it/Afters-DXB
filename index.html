@@ -296,8 +296,8 @@
   .dealers { padding: clamp(90px, 12vw, 160px) 0; background: var(--sand); }
   .dealers .head { text-align: center; max-width: 620px; margin: 0 auto 56px; }
   .dealers .head p { color: var(--ink-soft); margin: 24px 0 0; }
-  .dealer-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 20px; }
-  .dealer { background: var(--bone); padding: 28px; border-radius: 2px; }
+  .dealer-list { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; }
+  .dealer { background: var(--bone); padding: 32px; border-radius: 2px; width: min(340px, 100%); text-align: center; }
   .dealer h4 { font-family: var(--serif); font-weight: 400; font-size: 26px; margin: 0 0 4px; }
   .dealer .city { font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: var(--muted); margin-bottom: 18px; }
   .dealer a { display: block; font-size: 14px; color: var(--ink-soft); padding: 4px 0; }
@@ -430,7 +430,7 @@
       </div>
       <div><h5>Explore</h5><ul><li><a href="#collection">Collection</a></li><li><a href="#how">How to order</a></li><li><a href="#scan">Share catalog</a></li></ul></div>
       <div><h5>Dealers</h5><ul><li><a href="#dealers">Find a dealer</a></li></ul></div>
-      <div><h5>Cloud Furniture</h5><ul><li>Quality You Can Trust.</li></ul></div>
+      <div><h5>Contact</h5><ul><li><a href="tel:+919123397611">+91 91233 97611</a></li><li><a href="https://wa.me/919123397611" target="_blank" rel="noopener">WhatsApp</a></li><li>Kolkata, India</li></ul></div>
     </div>
     <div class="bottom"><span>© <span id="year"></span> Cloud Furniture</span><span>Prices shown are starting prices · Orders via your dealer</span></div>
   </div>
@@ -471,7 +471,9 @@
 const SITE_URL = "https://cloud-furniture-catalog.netlify.app";
 
 // Example: { name: "Dealer name", city: "Mumbai", phone: "+91 90000 00000", whatsapp: "919000000000", map: "https://maps.google.com/?q=..." }
-const DEALERS = [];
+const DEALERS = [
+  { name: "Cloud Furniture", city: "Kolkata", phone: "+91 91233 97611", whatsapp: "919123397611" },
+];
 
 const MARQUEE = ["Quality you can trust", "Dependable construction", "Refined finishes", "Timeless design", "Dealer collection"];
 
