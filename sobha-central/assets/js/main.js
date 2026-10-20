@@ -17,9 +17,9 @@
   };
 
   var PLANS = {
-    '1': { unit: '1 BHK', type: '1 Bedroom Residence', price: 'AED 1,779,057' },
-    '2': { unit: '2 BHK', type: '2 Bedroom Residence', price: 'AED 2,467,669' },
-    '3': { unit: '3 BHK', type: '3 Bedroom Residence', price: 'AED 4,782,143' }
+    '1': { unit: '1 BHK', type: '1 Bedroom Residence', price: 'AED 1.78 Million' },
+    '2': { unit: '2 BHK', type: '2 Bedroom Residence', price: 'AED 2.47 Million' },
+    '3': { unit: '3 BHK', type: '3 Bedroom Residence', price: 'AED 4.78 Million' }
   };
 
   var CONTEXTS = {

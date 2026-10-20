@@ -228,6 +228,7 @@ p { margin: 0 0 16px; color: var(--mute); }
 .price__from { margin: 0; font-size: 11px; letter-spacing: .26em; text-transform: uppercase; }
 .price__amt { margin: 8px 0 32px; font: 400 clamp(32px, 3vw, 42px)/1.1 var(--serif); color: var(--gold-hi); }
 .price__amt small { font: 400 13px/1 var(--sans); letter-spacing: .2em; color: var(--mute); vertical-align: middle; margin-right: 4px; }
+.price__amt small + small, .price__amt small:last-child { margin: 0 0 0 4px; }
 .price__actions { display: grid; gap: 12px; }
 
 /* ---------- amenities ---------- */
