@@ -251,9 +251,13 @@
   });
   var reel = $('#reel'), reelBtn = $('#reelBtn'), reelWrap = reel.parentNode;
   function toggleReel() {
-    if (reel.paused) { reel.muted = false; reel.play(); reelWrap.classList.add('is-playing'); }
-    else { reel.pause(); reelWrap.classList.remove('is-playing'); }
+    if (reel.paused) {
+      reel.muted = false; reel.volume = 1; reel.controls = true; reel.play();
+      reelWrap.classList.add('is-playing');
+    } else { reel.pause(); }
   }
   reelBtn.addEventListener('click', toggleReel);
-  reel.addEventListener('click', toggleReel);
+  reel.addEventListener('click', function () { if (!reel.controls) toggleReel(); });
+  reel.addEventListener('pause', function () { reelWrap.classList.remove('is-playing'); });
+  reel.addEventListener('play', function () { reelWrap.classList.add('is-playing'); });
 })();
